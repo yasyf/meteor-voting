@@ -18,9 +18,9 @@ if (Meteor.isClient) {
     
   Template.add.events({
     'keypress #add' : function (e) {
-      if (e.which === 13 && Meteor.user()) {
-        $("#add").val('');
+      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val()})) {
         Items.insert({text: $("#add").val(), votes: 1, voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+        $("#add").val('');
       }
     }
   });
@@ -32,7 +32,14 @@ if (Meteor.isClient) {
       }
     }
   });
+
+  if(location.hash.substring(1,7) == "delete"){
+    Items.remove({_id: location.hash.substring(8)});
+  }
+
 }
+
+
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
