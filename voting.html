@@ -32,7 +32,8 @@
   {{#each items}}
   <div style="background-color: {{colour}}" class="item">
   	<div class="inner">
-  		{{text}}<br />
+  		<span class='txt'><span class='inner'>{{text}}</span></span>
+        <br />
       &nbsp;[{{votes}}]
       <br />
     {{#if canDelete owner}}
