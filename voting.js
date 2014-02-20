@@ -23,8 +23,8 @@ if (Meteor.isClient) {
     
   Template.add.events({
     'keypress #add' : function (e) {
-      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,40)})) {
-        Items.insert({text: $("#add").val().substring(0,40), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,150)})) {
+        Items.insert({text: $("#add").val().substring(0,150), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
         $("#add").val('');
       }
     }

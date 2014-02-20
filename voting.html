@@ -20,8 +20,9 @@
 <template name="add">
 <div style="text-align:center">
   <h1>Maseeh 2 Voting</h1>
+  <p>Click 2 Vote!</p>
   {{#if currentUser}} 
-	<input type="text" id="add" style="width: 50%;">
+	<input type="text" id="add" style="width: 50%;" maxlength="150">
   {{else}}
   {{loginButtons}}
   {{/if}}
