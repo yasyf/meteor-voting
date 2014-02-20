@@ -20,7 +20,8 @@
 <template name="add">
 <div style="text-align:center">
   <h1>Maseeh 2 Voting</h1>
-  <p>Click 2 Vote!</p>
+  <p id="c2v">Click 2 Vote!</p>
+  <p id="vd" style="display: none;">Voted!</p>
   {{#if currentUser}} 
 	<input type="text" id="add" style="width: 50%;" maxlength="150">
   {{else}}
@@ -31,16 +32,23 @@
 
 <template name="item">
   {{#each items}}
-  <div style="background-color: {{colour}}" class="item">
-  	<div class="inner">
-  		<span class='txt'><span class='inner'>{{text}}</span></span>
+  {{>i}}
+  {{/each}}
+</template>
+
+<template name="i">
+<div style="background-color: {{colour}};" class="item" id="item_{{_id}}">
+    <span id="voted_{{_id}}" style="z-index:100;position:absolute;margin-left:-26px;display:none;">Voted!</span>
+    <div class="inner">
+      <span class='txt'><span class='inner'>{{text}}</span></span>
         <br />
       &nbsp;[{{votes}}]
       <br />
     {{#if canDelete owner}}
     <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}">Delete</button>
     {{/if}}
-  	</div>
+    </div>
   </div>
-  {{/each}}
 </template>
+
+

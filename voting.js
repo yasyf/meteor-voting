@@ -10,21 +10,34 @@ if (Meteor.isClient) {
     return Meteor.userId() && ((owner === Meteor.userId()) || (_.contains(deleters,Meteor.userId())));
   };
 
-  function randcol() {
-    var letters = '012345'.split('');
-    var color = '#';        
-    color += letters[Math.round(Math.random() * 5)];
-    letters = '0123456789ABCDEF'.split('');
-    for (var i = 0; i < 5; i++) {
-        color += letters[Math.round(Math.random() * 15)];
+  Template.i.rendered = function() {
+    if(this.rendered != this.data.votes){
+      if(this.rendered){
+        $('#vd').fadeIn(1000);
+        $('#vd').fadeOut(1000);
+        $('#voted_'+this.data._id).fadeIn(1000);
+        $('#voted_'+this.data._id).fadeOut(1000);
+      }
+      $('#item_'+this.data._id).fadeOut(0);
+      $('#item_'+this.data._id).fadeIn(500);
+      this.rendered = this.data.votes;
     }
-    return color;
+  };
+
+  function randcol() {
+    function rand(min, max) {
+      return parseInt(Math.random() * (max-min+1), 10) + min;
+    }
+    var h = rand(1, 360); // color hue between 1 and 360
+    var s = rand(90, 100); // saturation 30-100%
+    var l = rand(35, 60); // lightness 30-70%
+    return 'hsl(' + h + ',' + s + '%,' + l + '%)';
     }  
     
   Template.add.events({
     'keypress #add' : function (e) {
       if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,150)})) {
-        Items.insert({text: $("#add").val().substring(0,150), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+        id = Items.insert({text: $("#add").val().substring(0,150), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
         $("#add").val('');
       }
     }
