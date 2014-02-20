@@ -1,4 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=Varela+Round);
+body{
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+
+  /* No support for these yet, use at own risk */
+    -o-user-select: none;
+    user-select: none;  
+}
 .item{
 	width: 200px;
 	height: 200px;
@@ -20,6 +29,7 @@
   /* No support for these yet, use at own risk */
     -o-user-select: none;
     user-select: none;   
+    text-transform: capitalize;
 }
 .delbtn{
     position: relative;

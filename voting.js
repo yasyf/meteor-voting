@@ -23,8 +23,8 @@ if (Meteor.isClient) {
     
   Template.add.events({
     'keypress #add' : function (e) {
-      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val()})) {
-        Items.insert({text: $("#add").val(), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,40)})) {
+        Items.insert({text: $("#add").val().substring(0,40), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
         $("#add").val('');
       }
     }
@@ -36,8 +36,9 @@ if (Meteor.isClient) {
         Items.update({_id: this._id}, {$inc: {votes: 1}, $push: {voted: Meteor.userId()}});
       }
     },
-    'click .delbtn' : function () {
+    'click .delbtn' : function (e) {
       Items.remove({_id: this._id});
+      e.stopImmediatePropagation();
     }
   });
 
