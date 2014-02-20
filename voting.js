@@ -1,8 +1,13 @@
 Items = new Meteor.Collection("items");
+var deleters = Array("AbmyphdodrfQSqP2X");
 if (Meteor.isClient) {
 
   Template.item.items = function () {
     return Items.find({},{sort: {votes: -1, dt: -1}}).fetch();
+  };
+
+  Template.item.canDelete = function(owner) {
+    return Meteor.userId() && ((owner === Meteor.userId()) || (_.contains(deleters,Meteor.userId())));
   };
 
   function randcol() {
@@ -19,7 +24,7 @@ if (Meteor.isClient) {
   Template.add.events({
     'keypress #add' : function (e) {
       if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val()})) {
-        Items.insert({text: $("#add").val(), votes: 1, voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+        Items.insert({text: $("#add").val(), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
         $("#add").val('');
       }
     }
@@ -30,6 +35,9 @@ if (Meteor.isClient) {
       if(Meteor.user() && !_.contains(Items.findOne({_id: this._id}).voted,Meteor.userId())){
         Items.update({_id: this._id}, {$inc: {votes: 1}, $push: {voted: Meteor.userId()}});
       }
+    },
+    'click .delbtn' : function () {
+      Items.remove({_id: this._id});
     }
   });
 
@@ -42,6 +50,20 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    // code to run on server at startup
+    Items.allow({
+      insert: function (userId, doc) {
+        // the user must be logged in
+        return (userId);
+      },
+      update: function (userId, doc, fields, modifier) {
+        // the user must be logged in
+        return (userId);
+      },
+      remove: function (userId, doc) {
+        // can only remove your own documents (unless admin)
+        return userId && ((doc.owner === userId) || (_.contains(deleters,userId)));
+      }
+    });
   });
+
 }

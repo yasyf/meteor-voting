@@ -31,10 +31,14 @@
 
 <template name="item">
   {{#each items}}
-  <div style="background-color: {{colour}}" class="item" id="{{_id}}">
+  <div style="background-color: {{colour}}" class="item">
   	<div class="inner">
   		{{text}} ({{votes}})
+      <br />
   	</div>
+    {{#if canDelete owner}}
+    <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}">Delete</button>
+    {{/if}}
   </div>
   {{/each}}
 </template>
