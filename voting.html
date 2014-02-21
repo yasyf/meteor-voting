@@ -45,7 +45,15 @@
       &nbsp;[{{votes}}]
       <br />
     {{#if canDelete owner}}
-    <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}">Delete</button>
+      {{#if isWaitingForDelete deleters}}
+        {{#if canHelpDelete deleters}}
+        <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}">Waiting For You</button>
+        {{else}}
+        <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}" disabled>Waiting For {{deletersRemaining deleters.length}}</button>
+        {{/if}}
+      {{else}}
+      <button type="button" class="btn btn-default btn-xs delbtn" id="{{_id}}">Delete</button>
+      {{/if}}
     {{/if}}
     </div>
   </div>
