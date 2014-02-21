@@ -6,7 +6,7 @@ if (Meteor.isClient) {
     return Items.find({},{sort: {votes: -1, dt: -1}}).fetch();
   };
 
-  Template.item.canDelete = function(owner) {
+  Template.i.canDelete = function(owner) {
     return Meteor.userId() && ((owner === Meteor.userId()) || (_.contains(deleters,Meteor.userId())));
   };
 
@@ -36,8 +36,8 @@ if (Meteor.isClient) {
     
   Template.add.events({
     'keypress #add' : function (e) {
-      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,150)})) {
-        id = Items.insert({text: $("#add").val().substring(0,150), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
+      if (e.which === 13 && Meteor.user() && !Items.findOne({text: $("#add").val().substring(0,150).toLowerCase()})) {
+        id = Items.insert({text: $("#add").val().substring(0,150).toLowerCase(), votes: 1, owner: Meteor.userId(), voted: Array(Meteor.userId()), colour: randcol(), dt: new Date()});
         $("#add").val('');
       }
     }
@@ -50,8 +50,13 @@ if (Meteor.isClient) {
       }
     },
     'click .delbtn' : function (e) {
-      Items.remove({_id: this._id});
       e.stopImmediatePropagation();
+      var del_id = this._id;
+      $('#item_'+del_id).fadeOut(500);
+      del = function(){
+        Items.remove({_id: del_id});
+      }
+      setTimeout(del,500);
     }
   });
 
@@ -79,5 +84,4 @@ if (Meteor.isServer) {
       }
     });
   });
-
 }
