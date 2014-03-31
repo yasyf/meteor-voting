@@ -32,7 +32,8 @@ if (Meteor.isClient) {
 
   Template.i.rendered = function() {
     if(this.rendered != this.data.votes){
-      if(this.rendered){
+      if(this.rendered && Session.get("voted_"+this.data._id) === true){
+        Session.set("voted_"+this.data._id,null);
         $('#vd').fadeIn(1000);
         $('#vd').fadeOut(1000);
         $('#voted_'+this.data._id).fadeIn(1000);
@@ -68,16 +69,17 @@ if (Meteor.isClient) {
     'click .item' : function () {
       if(Meteor.user() && !_.contains(Items.findOne({_id: this._id}).voted,Meteor.userId())){
         Items.update({_id: this._id}, {$inc: {votes: 1}, $push: {voted: Meteor.userId()}});
+        Session.set("voted_"+this._id,true);
       }
     },
     'click .delbtn' : function (e) {
+      e.stopImmediatePropagation();
       i = Items.findOne({_id: this._id})
       if(i.owner != Meteor.userId() && _.contains(deleters,Meteor.userId()) && !_.contains(i.deleters,Meteor.userId())){
         Items.update({_id: this._id}, {$push: {deleters: Meteor.userId()}})
         i = Items.findOne({_id: this._id})
       }
       if(i.owner == Meteor.userId() || (_.contains(deleters,Meteor.userId()) && i.deleters && i.deleters.length == deleters.length)){
-        e.stopImmediatePropagation();
         var del_id = this._id;
         $('#item_'+del_id).fadeOut(500);
         del = function(){
